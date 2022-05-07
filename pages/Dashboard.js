@@ -9,13 +9,13 @@ import { ethers } from 'ethers'
 const sdk = new ThirdwebSDK(
     new ethers.Wallet(
         process.env.NEXT_PUBLIC_METAMASK_KEY,
-        ethers.getDefaultProvider(
-            'rinkeby'
-        )
+        ethers.getDefaultProvider( "rinkeby", {
+            alchemy: "704xYj4J3wq1ncISNTVEu3-YnXYjHh_V",
+          })
     )
 )
 
-const Dashboard = ({ address }) => {
+const Dashboard = ({ address}) => {
     const [sanityTokens, setSanityTokens] = useState([])
     const [thirdWebTokens, setThirdWebTokens] = useState([])
 
@@ -37,8 +37,7 @@ const Dashboard = ({ address }) => {
         getSanityAndThirdWebTokens()
     }, [])
 
-    console.log(thirdWebTokens)
-    console.log(thirdWebTokens[0].balanceOf(address))
+    // console.log(thirdWebTokens[0].balanceOf(address))
 
     // console.log('Sanity 👉', sanityTokens)
     // console.log('Thirdweb 👉', thirdWebTokens)

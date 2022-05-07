@@ -1,5 +1,7 @@
 import '../styles/globals.css'
+import "react-loader-spinner/dist/"
 import { ThirdwebWeb3Provider } from '@3rdweb/hooks'
+
 
 const supportedChainIds = [4]
 const connectors = {

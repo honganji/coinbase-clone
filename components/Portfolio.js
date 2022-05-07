@@ -6,29 +6,34 @@ import Coin from './Coin'
 import BalanceChart from './BalanceChart'
 
 const Portfolio = ({ thirdWebTokens, sanityTokens, walletAddress }) => {
-  // thirdWebTokens[0].balanceOf(walletAddress).then(balance => console.log(balance))
+  const [walletBalance, setWalletBalance] = useState(0)
+  
   // console.log(sanityTokens)
-  // const tokenToUSD = {}
+  const tokenToUSD = {}
 
-  // for(const token of sanityTokens){
-  //   tokenToUSD[token.contractAddress] = Number(token.usdPrice)
-  // }
+  for(const token of sanityTokens){
+    tokenToUSD[token.contractAddress] = Number(token.usdPrice)
+  }
 
   // console.table(tokenToUSD)
 
-  // const calculateTotalBalance = async () => {
-  //   let total = 0
-  //   for(const token of thirdWebTokens){
-  //     const balance = await token.balanceOf(walletAddress)
-  //     total += Number(balance.displayValue) * tokenToUSD[token.address]
-  //   }
- 
-  //   console.log(total)
-  //   return total
-  // }
+  
 
-  // calculateTotalBalance()
-  //convert all of my tokens into USD
+  useEffect(() => {
+    const calculateTotalBalance = async () => {
+      const totalBalance = await Promise.all(
+        thirdWebTokens.map(async token => {
+          const balance = await token.balanceOf(walletAddress)
+          return Number(balance.displayValue) * tokenToUSD[token.address]
+        })
+      )
+      console.log('Total balance:', totalBalance)
+      setWalletBalance(totalBalance.reduce((acc, curr) => acc + curr, 0))
+    }
+
+    calculateTotalBalance()
+  }, [thirdWebTokens, sanityTokens])
+  // convert all of my tokens into USD
   return (
     <Wrapper>
       <Content>
@@ -38,8 +43,8 @@ const Portfolio = ({ thirdWebTokens, sanityTokens, walletAddress }) => {
               <BalanceTitle>Portfolio Balance</BalanceTitle>
               <BalanceValue>
                 {'$'}
-                {/* {walletBalance.toLocaleString()} */}
-                46,000
+                {walletBalance.toLocaleString()}
+                {/* {46,000} */}
               </BalanceValue>
             </Balance>
           </div>
